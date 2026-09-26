@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "node build.mjs",
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 60,
+      "includeFiles": "{metadata.py,remote_audio.py,cloud_auth.py}"
+    }
+  },
+  "rewrites": [
+    {"source": "/api/audio-jobs", "destination": "/api/audio"},
+    {"source": "/api/audio-jobs/:job/download", "destination": "/api/audio?download=1"},
+    {"source": "/api/audio-jobs/:job", "destination": "/api/audio"}
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "Referrer-Policy", "value": "no-referrer"},
+        {"key": "X-Frame-Options", "value": "DENY"},
+        {"key": "Content-Security-Policy", "value": "default-src 'self'; img-src 'self' data: https://i.scdn.co https://*.spotifycdn.com; frame-src https://open.spotify.com; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"}
+      ]
+    },
+    {"source": "/api/(.*)", "headers": [{"key": "Cache-Control", "value": "no-store"}]}
+  ]
+}
