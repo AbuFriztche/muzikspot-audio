@@ -1,0 +1,1 @@
+# Bu uygulama yalnızca Python standart kütüphanesini kullanır.
